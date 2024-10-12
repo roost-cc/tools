@@ -14,28 +14,28 @@ pkgs.mkShell {
 
   # Optional: Set up environment variables here if needed
   shellHook = ''
-    if [ ! -f ~/.aws/credentials ]; then
-      echo "AWS credentials not found. Please provide your AWS Access Key and Secret Key."
-
-      # Prompt the user for AWS Access Key ID
-      read -p "Enter your AWS Access Key ID: " aws_access_key_id
-
-      # Prompt the user for AWS Secret Access Key
-      read -sp "Enter your AWS Secret Access Key: " aws_secret_access_key
-      echo
-
-      # Ensure the AWS credentials directory exists
-      mkdir -p ~/.aws
-
-      # Store the credentials in ~/.aws/credentials
-      cat > ~/.aws/credentials <<EOF
-[default]
-aws_access_key_id = $aws_access_key_id
-aws_secret_access_key = $aws_secret_access_key
-EOF
-
-      echo "AWS credentials stored successfully."
-    fi
+#     if [ ! -f ~/.aws/credentials ]; then
+#       echo "AWS credentials not found. Please provide your AWS Access Key and Secret Key."
+#
+#       # Prompt the user for AWS Access Key ID
+#       read -p "Enter your AWS Access Key ID: " aws_access_key_id
+#
+#       # Prompt the user for AWS Secret Access Key
+#       read -sp "Enter your AWS Secret Access Key: " aws_secret_access_key
+#       echo
+#
+#       # Ensure the AWS credentials directory exists
+#       mkdir -p ~/.aws
+#
+#       # Store the credentials in ~/.aws/credentials
+#       cat > ~/.aws/credentials <<EOF
+# [default]
+# aws_access_key_id = $aws_access_key_id
+# aws_secret_access_key = $aws_secret_access_key
+# EOF
+#
+#       echo "AWS credentials stored successfully."
+#     fi
 
     export ROOST_DIR=__ROOST_DIR__
     export ROOST_APP_DIR="$ROOST_DIR/app.roost.cc"
