@@ -35,7 +35,7 @@ while true; do
   else
     echo "Remote step : ${STEP_FILE}"
     # grab the step from the repo if it exists
-    HTTP_CODE=$(curl -s -w "%{http_code}" -X HEAD https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE}))
+    HTTP_CODE=$(curl -s -w "%{http_code}" -X HEAD https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE})
     if[ HTTP_CODE -neq 200 ]; then
       echo No step $STEP
       exit
