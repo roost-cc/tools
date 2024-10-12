@@ -31,21 +31,23 @@ while true; do
   if [ -f "$ROOST_DIR/setup/${STEP_FILE}" ]; then
     echo "Local step : ${STEP_FILE}"
     # run the local step since it exists
-    bash --login <(cat $ROOST_DIR/setup/${STEP_FILE})
+    bash --login -e <(cat $ROOST_DIR/setup/${STEP_FILE})
   else
     echo "Remote step : ${STEP_FILE}"
     # grab the step from the repo if it exists
     HTTP_CODE=$(curl -s -w "%{http_code}" -X HEAD https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE})
-    if[ HTTP_CODE -neq 200 ]; then
+    if [ $HTTP_CODE -ne 200 ]; then
       echo No step $STEP
       exit
     fi 
-    bash --login <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE})
+    bash --login -e <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE})
   fi
+  
+  # Check the result
   RES=$?
   if [ $RES -eq 0 ]; then
     echo $STEP>$ROOST_DIR/.setup_step
-  elif [ $RES -eq 42]; then
+  elif [ $RES -eq 42 ]; then
     # The step needs out-of-band action 
     # Increment the step count & exit
     echo $STEP>$ROOST_DIR/.setup_step
@@ -55,6 +57,4 @@ while true; do
     echo "Step failed with exit code $RES."
     exit
   fi
-else
-fi
 done
