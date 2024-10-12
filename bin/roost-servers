@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$ROOST_APP_DIR" ]; then
+  echo "Environment variable ROOST_APP_DIR is not set"
+  exit 1
+fi
+ROOST_CONTAINER_DIR=${ROOST_APP_DIR}/containers
+ROOST_CLIENT_DIR=${ROOST_APP_DIR}/client
+
+tmux new -s roost -n containers -d
+tmux send-keys -t roost "cd $ROOST_CONTAINER_DIR" ENTER
+tmux send-keys -t roost "docker compose up" ENTER
+
+tmux new-window -t roost -n top
+tmux send-keys -t roost "btop" ENTER
+
+tmux new-window -t roost -n watch
+tmux send-keys -t roost "cd $ROOST_CLIENT_DIR" ENTER
+tmux send-keys -t roost "$ROOST_CLIENT_DIR/gulp watch" ENTER
+tmux a -t roost

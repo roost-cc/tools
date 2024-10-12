@@ -1,0 +1,8 @@
+#!/bin/sh
+case ":${PATH}:" in
+    *:"$ROOST_APP_DIR/tools/bin":*)
+        ;;
+    *)
+        export PATH="$ROOST_APP_DIR/tools/bin:$PATH"
+        ;;
+esac

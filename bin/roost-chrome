@@ -1,0 +1,124 @@
+#!/bin/bash
+if [ -z "$ROOST_APP_DIR" ]; then
+  echo "ROOST_APP_DIR not set, exiting..."
+  exit 1
+fi
+
+# Determine the name of the google-chrome executable 
+# either google-chrome or google-chrome-stable
+if command -v google-chrome >/dev/null 2>&1; then
+  BROWSER="google-chrome"
+elif command -v google-chrome-stable >/dev/null 2>&1; then
+  BROWSER="google-chrome-stable"
+else
+  echo "No Chrome browser found in the path. Exiting..."
+  exit 1
+fi
+
+
+PROFILE=roost
+CONFIG_DIR=$HOME/.config
+CACHE_DIR=$HOME/.cache/google-chrome-${PROFILE}
+DATA_DIR=${CONFIG_DIR}/google-chrome-${PROFILE}
+export SSLKEYLOGFILE=${DATA_DIR}/sslkeyfile
+SOURCE_DIR=${ROOST_APP_DIR}/tools/chrome-config/${PROFILE}
+
+RUNNING=""
+PROC=$(ps -ef | grep -v grep | grep $BROWSER | grep -- "$DATA_DIR")
+if [[ ! -z "$PROC" ]]; then
+  RUNNING="running"
+fi
+echo "roost chrome running? : $RUNNING"
+
+TEST=""
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+  key="$1"
+
+  case $key in
+    --clean)
+      CLEAN=clean
+      echo clean
+      shift # past argument
+      ;;
+    --help)
+      HELP=help
+      shift # past argument
+      ;;
+    --cache)
+      CLEAR_CACHE=cache
+      echo clear cache
+      shift # past argument
+      ;;
+    --diff)
+      DATA_DIFF=diff
+      echo show differences
+      shift # past argument
+      ;;
+    --test)
+      TEST=$ROOST_APP_DIR/client/test/start.html
+      shift # past argument
+      ;;
+    *)    # unknown option
+      POSITIONAL+=("$1") # save it in an array for later
+      shift # past argument
+      ;;
+  esac
+done
+
+if [[ $HELP == "help" ]]; then
+  echo "usage: roost-chrome [option]"
+  echo
+  echo "Starts chrome using a seperate data directory from the system default."
+  echo
+  echo "Options:"
+  echo "    --clean : removes the chrome data directory and cache directory"
+  echo "    --cache : removes cache directory, keeps the data directory"
+  echo "    --test  : interactively run integration tests"
+  echo "    --diff  : shows differences in Preferences between"
+  echo "              the clean profile and the running profile"
+  exit 0
+fi
+
+if [[ $RUNNING == "running" && $CLEAN == "clean" ]]; then
+  echo "can't clean while running, stop chrome and try again"
+  exit 1
+fi
+
+if [[ $RUNNING == "running" && $CLEAN == "cache" ]]; then
+  echo "can't clear cache while running, stop chrome and try again"
+  exit 1
+fi
+
+if [[ $DATA_DIFF == "diff" ]]; then
+  PREF_CURRENT=$(mktemp)
+  jq --sort-keys . ${CONFIG_DIR}/google-chrome-${PROFILE}/Default/Preferences > $PREF_CURRENT
+  vimdiff $SOURCE_DIR/Default/Preferences $PREF_CURRENT
+  rm $PREF_CURRENT
+  exit 0
+fi
+
+if [[ $RUNNING == "" ]]; then
+  if [[ $CLEAN == "clean" ]]; then
+    echo "Fresh start"
+    if [[ -d $DATA_DIR ]]; then
+      echo "Roost developer chrome not running and ${DATA_DIR} exists, removing..."
+      rm -rv ${DATA_DIR}
+    fi
+    echo "Clearing cache"
+    rm -rv ${CACHE_DIR}
+    echo "Deploying fresh data directory"
+    cp -av "$SOURCE_DIR" "$DATA_DIR"
+    exit 0
+  fi
+  if [[ $CLEAN == "clean" || $CLEAR_CACHE == "cache" ]]; then
+    echo "Clearing cache"
+    rm -rv ${CACHE_DIR}
+    exit 0
+  fi
+fi
+
+echo "Starting Google Chrome for roost"
+echo "SSL Key Log : ${SSLKEYLOGFILE}"
+echo $BROWSER --user-data-dir=$DATA_DIR --auto-open-devtools-for-tabs --enable-logging=stderr "$TEST" "${POSITIONAL[@]}"
+$BROWSER --user-data-dir=$DATA_DIR --auto-open-devtools-for-tabs --enable-logging=stderr "$TEST" "${POSITIONAL[@]}"

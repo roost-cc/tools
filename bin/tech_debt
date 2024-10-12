@@ -1,0 +1,83 @@
+#!/usr/bin/env node
+const fs = require('fs')
+const path = require('path')
+const readline = require('readline')
+
+function usage() {
+  console.log(`Usage: tech_debt [OPTION...]
+
+  Searches for technical debt in the for of 'TODO:[ISSUE_ID]'
+  --help   display this message
+  --dir    the directory to check
+  `)
+  process.exit(1)
+}
+
+function getArgv(name, default_value) {
+  if( !process.argv.includes("--binary") ) return default_value
+  return process.argv[process.argv.indexOf(name) + 1]
+}
+
+async function* walk(dir, ignore) {
+  try {
+    const files = fs.promises.opendir(dir)
+    for await (const f of await files) {
+      const entry = path.join(dir, f.name);
+      if(ignore.some(pattern => pattern.test(entry))) continue
+      if (f.isDirectory()) yield* walk(entry, ignore);
+      else if (f.isFile()) yield entry;
+    }
+  } catch (err) {
+    console.warn(`Can't open ${dir}`)
+  }
+}
+
+(async() => {
+  if( process.argv.includes("--help") ) usage()
+  var dir = getArgv('--dir',process.env.ROOST_APP_DIR)
+  var ignore = [
+    /.*\/node_module/,
+    /.*\/third-party/,
+    /.*\/tmp/,
+    /.*\/\.git/,
+    /.*\.jar$/,
+    /.*\.tar$/,
+    /.*\/tools\/chrome-config/,
+    /.*\/client\/work-in-progress/,
+    /.*\/client\/attic/,
+    /.*\/client\/build/,
+    /.*\/client\/reports/,
+    /.*\/server\/build/,
+    /.*\/server\/reports/,
+    /.*\/chromedriver.*/,
+  ]
+  var issues = 0
+  var unreportedIssues = 0
+  var quite = false
+
+  var matchPattern = /@?TODO\s*:?\s*/i
+  const groupPattern = '([A-Z0-9]+-\\d+)?(.*)'
+  for await (const file of walk(dir, ignore)) {
+    try {
+      let line_no = 0
+      const fileStream = fs.createReadStream(file);
+      const reader = readline.createInterface({
+        input: fileStream,
+        crlfDelay: Infinity
+      });
+      for await (const line of reader) {
+        line_no += 1
+        const match = matchPattern.exec(line)
+        if(match) {
+          const groups = (new RegExp(match[0]+groupPattern)).exec(line)
+          issues += 1
+          if(groups[1]==null) unreportedIssues += 1
+          if(!quite) console.log(`${file}:${line_no}:${match.index} '${groups[0]}'`)
+        }
+      }
+    } catch(e) {
+      console.warn(`Error processing ${file}`,e)
+    }
+  }
+  if(!quite) console.log(`Found ${issues} issues including ${unreportedIssues} unreported issues`)
+})()

@@ -1,0 +1,20 @@
+#!/bin/sh
+# TODO: add to setup.sh in parent directory
+VERSION=latest
+OS=linux64
+FILENAME="dynamodb_local_${VERSION}"
+TAR_FILE="${FILENAME}.tar.gz"
+JAR_FILE="DynamoDBLocal.jar"
+URL="https://s3.us-west-2.amazonaws.com/dynamodb-local/${TAR_FILE}"
+DOWNLOAD_DIR="${ROOST_APP_DIR}/tools/lib/${FILENAME}"
+LIB_DIR="${ROOST_APP_DIR}/tools/lib/dynamodb"
+
+mkdir -p $DOWNLOAD_DIR
+curl --output $DOWNLOAD_DIR/$TAR_FILE $URL
+tar -xvf $DOWNLOAD_DIR/$TAR_FILE -C $DOWNLOAD_DIR
+rm -f $DOWNLOAD_DIR/$TAR_FILE
+rm $LIB_DIR
+ln -s $DOWNLOAD_DIR $LIB_DIR
+
+#mv $DOWNLOAD_DIR/$JAR_FILE $DOWNLOAD_DIR/${FILENAME}.jar
+#ln -s $DOWNLOAD_DIR/${FILENAME}.jar $DOWNLOAD_DIR/$JAR_FILE

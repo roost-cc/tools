@@ -1,0 +1,57 @@
+#!/usr/bin/env node
+
+async function main() {
+  const fs = await import('fs');
+  const path = await import('path');
+  const parser = await import("node-html-parser");
+  const beautify = (await import('js-beautify')).default.html;
+  const argparse = await import('argparse');
+
+  const arg_parser = new argparse.ArgumentParser({
+    description: 'Edits and HTML file'
+  });
+
+  arg_parser.add_argument('selector', { help: 'The CSS Selector', nargs: '?' });
+  arg_parser.add_argument('-i', { help: 'Updates the file in-place', action: 'store_true' });
+  arg_parser.add_argument('-f', '--file', { help: 'The input file, default STDIN', default: 0});
+  arg_parser.add_argument('-o', '--output', { help: 'The output file, default STDOUT', default: 1 });
+  arg_parser.add_argument('-m', '--module', { help: 'A module used edit nodes' });
+
+  const args = arg_parser.parse_args();
+
+  let module = {}
+  let moduleFile = args['module']
+
+  if(moduleFile) {
+    try {
+      module = await import(moduleFile);
+    } catch(e) {
+      try {
+        module = await import(path.resolve(moduleFile));
+      } catch(e) {
+        module = await import(path.join(path.dirname(__filename),'html-ed_modules',moduleFile+'.mjs'));
+      }
+    }
+  }
+
+  let selector = args['selector'] || module.selector
+  let input = args['file']
+  let output = args['output']
+  if(args['i']) {
+    output = input
+    // if input in STDIN, then output is STDOUT
+    if(output===0) output=1
+  }
+
+  const doc = parser.parse(fs.readFileSync(input),{comment:true});
+  for(let node of doc.querySelectorAll(selector)) {
+    if(module.default) {
+      await module.default(node);
+    } else {
+      console.log(node.toString());
+    }
+  }
+  fs.writeFileSync(output, beautify(doc.toString(),module.beautify))
+}
+
+main()
