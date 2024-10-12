@@ -28,8 +28,9 @@ fi
 
 echo setup.sh : $ROOST_DIR
 STEP=0
-if [ -d "$ROOST_DIR/.setup_step" ]; then
+if [ -f "$ROOST_DIR/.setup_step" ]; then
   STEP=$(cat $ROOST_DIR/.setup_step)
+  echo "Continuing setup on step $((STEP + 1))"
 fi
 
 while true; do
