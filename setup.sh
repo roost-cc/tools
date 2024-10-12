@@ -5,26 +5,5 @@ handle_error() {
 }
 
 trap 'handle_error $LINENO' ERR
-# TODO: add to chromedriver and local dynamodb functions
-#       ln this setup to bin directory as setup-roost or something
-ROOST_DIR=$(readlink -f .)
-echo "Step 1 : Setting up 'nix' ${ROOST_DIR}..."
-# install nix
-if command -v nix >/dev/null 2>&1; then
-  echo "nix already installed"
-else
-  sh <(curl -L https://nixos.org/nix/install) --daemon
-  mkdir -p $HOME/.config/nixpkgs/config.nix
-  echo "{ allowUnfree = true; }" > $HOME/.config/nixpkgs/config.nix
-fi
-# download the shell.nix
-curl https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/nix/shell.nix | sed "s#__ROOST_DIR__#\"$ROOST_DIR\"#" > ${ROOST_DIR}/shell.nix
-
-cd $ROOST_DIR
-
-nix-shell <<EOF
-git clone git@github.com:roost-cc/tools.git
-
-EOF
-{ allowUnfree = true; }
-echo "Step 1 complete"
+bash <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/step-1.sh)
+bash --login <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/step-2.sh)
