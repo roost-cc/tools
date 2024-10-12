@@ -28,10 +28,10 @@ fi
 while true; do
   STEP=$((STEP + 1))
   STEP_FILE=step-${STEP}.sh
-  if [ -f "$ROOST_DIR/setup/${STEP_FILE}" ]; then
+  if [ -f "$ROOST_DIR/tools/setup/${STEP_FILE}" ]; then
     echo "Local step : ${STEP_FILE}"
     # run the local step since it exists
-    bash --login -e <(cat $ROOST_DIR/setup/${STEP_FILE})
+    bash --login -e <(cat $ROOST_DIR/tools/setup/${STEP_FILE})
   else
     echo "Remote step : ${STEP_FILE}"
     # grab the step from the repo if it exists
