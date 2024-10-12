@@ -14,10 +14,10 @@
   "dependencies": {
     "argparse": "^2.0.1",
     "progress-stream": "^2.0.0",
-    "unzip-stream": "^0.3.1"
+    "unzip-stream": ">=0.3.4"
   },
   "devDependencies": {
-    "@babel/eslint-plugin": "^7.19.1",
-    "@babel/plugin-syntax-import-assertions": "^7.20.0"
+    "@babel/eslint-plugin": "^7.25.7",
+    "@babel/plugin-syntax-import-assertions": "^7.25.7"
   }
 }
