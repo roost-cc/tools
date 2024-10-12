@@ -8,7 +8,7 @@ trap 'handle_error $LINENO' ERR
 # TODO: add to chromedriver and local dynamodb functions
 #       ln this setup to bin directory as setup-roost or something
 ROOST_DIR=$(readlink -f .)
-echo "Step 1 : Setting up 'nix' ${ROOST_DIR}..."
+echo "Step 1 : Setting up 'nix' : ${ROOST_DIR}..."
 # install nix
 if command -v nix >/dev/null 2>&1; then
   echo "nix already installed"

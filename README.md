@@ -10,6 +10,11 @@ command -v curl >/dev/null 2>&1 || { echo "curl not found, installing..."; sudo 
 ```
 
 ## Run install script
+Create your development directory, e.g. `$HOME/work/roost`
 ```
-sh <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup.sh)
+mkdir -p $HOME/work/roost
+
+```
+bash <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/step-1.sh) && \
+bash <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/step-2.sh) 
 ```
