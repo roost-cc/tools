@@ -15,8 +15,7 @@ Create your development directory, e.g. `$HOME/work/roost`
 mkdir -p $HOME/work/roost && cd $HOME/work/roost
 
 ```
-Run the setup steps
+Run the setup 
 ```
-bash <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/step-1.sh) && \
-bash --login <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/step-2.sh)
+bash <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup.sh) 
 ```
