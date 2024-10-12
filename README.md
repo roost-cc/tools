@@ -10,3 +10,6 @@ command -v curl >/dev/null 2>&1 || { echo "curl not found, installing..."; sudo 
 ```
 
 ## Run install script
+```
+sh <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup.sh)
+```
