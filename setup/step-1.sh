@@ -14,7 +14,7 @@ if command -v nix >/dev/null 2>&1; then
   echo "nix already installed"
 else
   sh <(curl -L https://nixos.org/nix/install) --daemon
-  mkdir -p $HOME/.config/nixpkgs/config.nix
+  mkdir -p $HOME/.config/nixpkgs/
   echo "{ allowUnfree = true; }" > $HOME/.config/nixpkgs/config.nix
 fi
 # download the shell.nix
