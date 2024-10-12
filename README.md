@@ -18,5 +18,5 @@ mkdir -p $HOME/work/roost && cd $HOME/work/roost
 Run the setup steps
 ```
 bash <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/step-1.sh) && \
-bash <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/step-2.sh) 
+bash --login <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/step-2.sh)
 ```

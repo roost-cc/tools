@@ -19,7 +19,7 @@ else
 fi
 # download the shell.nix
 curl https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/nix/shell.nix | sed "s#__ROOST_DIR__#\"$ROOST_DIR\"#" > ${ROOST_DIR}/shell.nix
-
-cd $ROOST_DIR
-
 echo "Step 1 complete"
+
+bash --login <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/step-2.sh)
+
