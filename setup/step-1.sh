@@ -22,9 +22,4 @@ curl https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/nix/shell.
 
 cd $ROOST_DIR
 
-nix-shell <<EOF
-git clone git@github.com:roost-cc/tools.git
-
-EOF
-{ allowUnfree = true; }
 echo "Step 1 complete"
