@@ -26,7 +26,7 @@ if [ -z "$ROOST_DIR" ]; then
 
     # Prompt the user for input with the default value
     echo "Where do you want to install the Roost development environment?"
-    read -p "Where do you want to install [$default_location]: " location
+    read -p "[$default_location]: " location
 
     # If the user pressed Enter without typing anything, use the default full name
     location=${location:-$default_location}
