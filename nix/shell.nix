@@ -45,7 +45,7 @@ pkgs.mkShell {
 
     # Set a custom command line prompt
     # export PS1="(roost-dev) \u@\h:\w\$ "
-    export PS1="\n\[\033[1;32m\][roost-dev:\w]\$\[\033[0m\] "
+    export PS1="\n\[\033[1;32m\][🐓:\u@\h:\w]\$\[\033[0m\] "
 
     echo "Welcome to Roost 🐓"
   '';
