@@ -56,12 +56,14 @@ while true; do
     echo "Local step : ${STEP_FILE}"
     # run the local step since it exists
     read -p "press enter to continue"
+    echo
     bash --login -e <(cat $ROOST_DIR/tools/setup/${STEP_FILE})
   else
     echo "Remote step : ${STEP_FILE}"
     # grab the step from the repo if it exists
     echo curl -s -w \"%{http_code}\" -X HEAD https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE}
     read -p "press enter to continue"
+    echo
     HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X HEAD "https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE}" || true)
     if [ $HTTP_CODE -ne 200 ]; then
       echo No step $STEP
