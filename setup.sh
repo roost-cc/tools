@@ -11,6 +11,8 @@ handle_error() {
 }
 trap 'handle_error $LINENO' ERR
 
+export NIX_QUIET=true
+
 # set ROOST_DIR if necessary
 if [ -z "$ROOST_DIR" ]; then
   script_path=$(realpath "$0")
