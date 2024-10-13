@@ -22,7 +22,7 @@ if [ ! -f $pri_key ]; then
   if [ -n "$IN_NIX_SHELL" ]; then
     ssh-keygen -t rsa -b 4096 -C "$(git config user.name) [$(git config user.email)]" -f ${pri_key} || true
   else 
-    nix-shell --run "ssh-keygen -t rsa -b 4096 -C \"$(git config user.name) [$(git config user.email)]\" -f ${pri_key}"
+    nix-shell --run "ssh-keygen -t rsa -b 4096 -C \"\$(git config user.name) [\$(git config user.email)]\" -f ${pri_key}"
   fi
 fi
 
