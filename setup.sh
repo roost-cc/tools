@@ -39,6 +39,7 @@ if [ -z "$ROOST_DIR" ]; then
 fi
 
 echo Setting up in \"$ROOST_DIR\"
+cd $ROOST_DIR
 readlink -p "press enter to continue"
 
 STEP=0
