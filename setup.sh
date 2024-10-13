@@ -9,8 +9,6 @@ handle_error() {
     echo "Exit code: $exit_code"
     exit $exit_code  # Exit with the same error code that caused the trap
 }
-
-
 trap 'handle_error $LINENO' ERR
 
 # set ROOST_DIR if necessary

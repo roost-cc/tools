@@ -1,4 +1,16 @@
 #!/bin/bash
+handle_error() {
+    local exit_code=$?  # Captures the exit status of the last command
+    local error_line=$1  # The line number where the error occurred
+    local command="$BASH_COMMAND"  # The command that was being executed
+
+    echo "Error occurred on line $error_line."
+    echo "Command: $command"
+    echo "Exit code: $exit_code"
+    exit $exit_code  # Exit with the same error code that caused the trap
+}
+trap 'handle_error $LINENO' ERR
+
 echo "Setting up SSH keys and repo access"
 
 ssh_dir=$HOME/.ssh
@@ -6,7 +18,9 @@ ssh_config=$ssh_dir/config
 pri_key=$ssh_dir/roost
 pub_key=${pri_key}.pub
 
-ssh-keygen -t rsa -b 4096 -C "$(git config user.name) [${git config user.email}]" -f ${pri_key}
+if [ ! -f $pri_key ]; then 
+  ssh-keygen -t rsa -b 4096 -C "$(git config user.name) [$(git config user.email)]" -f ${pri_key} || true
+fi
 
 echo send this to the admin
 echo ---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------

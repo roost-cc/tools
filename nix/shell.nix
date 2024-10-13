@@ -10,6 +10,8 @@ pkgs.mkShell {
     pkgs.tmux          # For starting the stack with tmux
     pkgs.git           # Git for version control
     pkgs.google-chrome # Google Chrome installation in Nix
+    pkgs.cowsay
+    pkgs.fortune-kind
   ];
 
   # Optional: Set up environment variables here if needed
