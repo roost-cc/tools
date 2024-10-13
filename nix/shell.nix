@@ -47,7 +47,7 @@ pkgs.mkShell {
     # export PS1="(roost-dev) \u@\h:\w\$ "
     export PS1="\n\[\033[1;32m\][roost-dev:\w]\$\[\033[0m\] "
 
-    echo "Development environment set up. You can now run your commands."
+    echo "Welcome to Roost 🐓"
   '';
 }
 
