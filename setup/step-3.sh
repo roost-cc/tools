@@ -19,7 +19,11 @@ pri_key=$ssh_dir/roost
 pub_key=${pri_key}.pub
 
 if [ ! -f $pri_key ]; then 
-  ssh-keygen -t rsa -b 4096 -C "$(git config user.name) [$(git config user.email)]" -f ${pri_key} || true
+  if [ -n "$IN_NIX_SHELL" ]; then
+    ssh-keygen -t rsa -b 4096 -C "$(git config user.name) [$(git config user.email)]" -f ${pri_key} || true
+  else 
+    nix-shell --run "ssh-keygen -t rsa -b 4096 -C \"$(git config user.name) [$(git config user.email)]\" -f ${pri_key}"
+  fi
 fi
 
 echo send this to the admin
