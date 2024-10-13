@@ -45,12 +45,14 @@ pkgs.mkShell {
     # Chrome
     alias chrome="roost-chrome"
     # cowsay 
-    alias roostersay="cowsay -f __ROOST_DIR_/tools/nix/extras/rooster.cow"
+    alias roostersay="cowsay -f __ROOST_DIR__/tools/nix/extras/rooster.cow"
 
     # Set a custom command line prompt
     # export PS1="(roost-dev) \u@\h:\w\$ "
     export PS1="\n\[\033[1;32m\][🐓:\u@\h:\w]\$\[\033[0m\] "
 
+    fortune -s | roostersay
+    echo
     echo "Welcome to Roost 🐓"
   '';
 }
