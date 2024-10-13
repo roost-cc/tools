@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ ! -z "$ROOST_DIR" ]; then
+if [ -n "$ROOST_DIR" ]; then
   cd $ROOST_DIR/tools
   BRANCH="main"  # Replace with your branch if needed (e.g., "master")
 

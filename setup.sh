@@ -22,11 +22,25 @@ if [ -z "$ROOST_DIR" ]; then
     ROOST_DIR=$(dirname $ROOST_DIR)
     export ROOST_DIR
   else
-    export ROOST_DIR=$(readlink -f .)
+    default_location=${HOME}/work/roost
+
+    # Prompt the user for input with the default value
+    echo "Where do you want to install the Roost development environment?"
+    read -p "Where do you want to install [$default_location]: " location
+
+    # If the user pressed Enter without typing anything, use the default full name
+    location=${location:-$default_location}
+    if [ ! -d "${location}" ]; then
+      mkdir -p "${location}"
+    fi
+
+    export ROOST_DIR=${location}
   fi
 fi
 
-echo setup.sh : $ROOST_DIR
+echo Setting up in \"$ROOST_DIR\"
+readlink -p "press enter to continue"
+
 STEP=0
 if [ -f "$ROOST_DIR/.setup_step" ]; then
   STEP=$(cat $ROOST_DIR/.setup_step)
@@ -53,19 +67,20 @@ while true; do
     fi 
     bash --login -e <(curl -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE})
   fi
+  echo $STEP>$ROOST_DIR/.setup_step
   
-  # Check the result
-  RES=$?
-  if [ $RES -eq 0 ]; then
-    echo $STEP>$ROOST_DIR/.setup_step
-  elif [ $RES -eq 42 ]; then
-    # The step needs out-of-band action 
-    # Increment the step count & exit
-    echo $STEP>$ROOST_DIR/.setup_step
-    exit
-  else
-    # something else when wrong - exit
-    echo "Step failed with exit code $RES."
-    exit
-  fi
+  # # Check the result
+  # RES=$?
+  # if [ $RES -eq 0 ]; then
+  #   echo $STEP>$ROOST_DIR/.setup_step
+  # elif [ $RES -eq 42 ]; then
+  #   # The step needs out-of-band action 
+  #   # Increment the step count & exit
+  #   echo $STEP>$ROOST_DIR/.setup_step
+  #   exit
+  # else
+  #   # something else when wrong - exit
+  #   echo "Step failed with exit code $RES."
+  #   exit
+  # fi
 done
