@@ -11,7 +11,7 @@ pkgs.mkShell {
     pkgs.git           # Git for version control
     pkgs.google-chrome # Google Chrome installation in Nix
     pkgs.cowsay
-    pkgs.fortune-kind
+    pkgs.fortune
   ];
 
   # Optional: Set up environment variables here if needed
@@ -44,6 +44,8 @@ pkgs.mkShell {
     export PATH="$ROOST_DIR/tools/bin:$PATH"
     # Chrome
     alias chrome="roost-chrome"
+    # cowsay 
+    alias roostersay="cowsay -f __ROOST_DIR_/tools/nix/extras/rooster.cow"
 
     # Set a custom command line prompt
     # export PS1="(roost-dev) \u@\h:\w\$ "
