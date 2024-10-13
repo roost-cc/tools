@@ -34,8 +34,8 @@ echo "Downloading roost tools : ${ROOST_DIR}..."
 # setsup the environment, and pulls the tools
 if [ -n "$IN_NIX_SHELL" ]; then
   git config --global init.defaultBranch main && \
-  git config --global user.name \"${fullname}\" && \
-  git config --global user.email \"${email}\" && \
+  git config --global user.name "${fullname}" && \
+  git config --global user.email "${email}" && \
   git clone https://github.com/roost-cc/tools.git
 else 
   nix-shell --run " \
