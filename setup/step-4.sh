@@ -46,7 +46,9 @@ fi
 
 cd "$ROOST_DIR"
 
-git_host=git-codecommit.us-east-2.amazonaws.com
+#git_host=git-codecommit.us-east-2.amazonaws.com
+git_host=roost-git
+
 projects=("roost.cc" "app.roost.cc")
 for project in "${projects[@]}"; do
   echo "Processing project: $project"

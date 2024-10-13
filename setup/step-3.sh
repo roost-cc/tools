@@ -6,20 +6,7 @@ ssh_config=$ssh_dir/config
 pri_key=$ssh_dir/roost
 pub_key=${pri_key}.pub
 
-if [ ! -f "$pri_key" ]; then 
-  # Get the default full name from the system
-  default_fullname=$(getent passwd "$USER" | cut -d ':' -f 5)
-
-  # Prompt the user for input with the default value
-  read -p "Enter your full name [$default_fullname]: " fullname
-
-  # If the user pressed Enter without typing anything, use the default full name
-  fullname=${fullname:-$default_fullname}
-  
-  # generate the key
-  #ssh-keygen -t ed25519 -C "Roost development key for ${fullname}" -f ${pri_key}
-  ssh-keygen -t rsa -b 4096 -C "Roost development key for ${fullname}" -f ${pri_key}
-fi
+ssh-keygen -t rsa -b 4096 -C "$(git config user.name) [${git config user.email}]" -f ${pri_key}
 
 echo send this to the admin
 echo ---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------
