@@ -40,7 +40,7 @@ fi
 
 echo Setting up in \"$ROOST_DIR\"
 cd $ROOST_DIR
-readlink -p "press enter to continue"
+read -p "press enter to continue"
 
 STEP=0
 if [ -f "$ROOST_DIR/.setup_step" ]; then
