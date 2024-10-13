@@ -1,4 +1,9 @@
 #!/bin/bash
+FORCE_PULL=false
+if [ "$1" == "-f" ]; then
+  FORCE_PULL=true
+fi
+
 if [ -n "$ROOST_DIR" ]; then
   cd $ROOST_DIR/tools
   BRANCH="main"  # Replace with your branch if needed (e.g., "master")
@@ -11,19 +16,15 @@ if [ -n "$ROOST_DIR" ]; then
   LOCAL=$(git rev-parse $BRANCH)
   REMOTE=$(git rev-parse origin/$BRANCH)
 
-  if [ "$LOCAL" = "$REMOTE" ]; then
-      echo "Local and remote branches are up to date."
+  if [ "$LOCAL" = "$REMOTE" ] && [ "$FORCE_PULL" = false ]; then
+      echo "Up to date."
   else
-      echo "Remote is ahead of local."
-
-      # Run your commands here if the remote is ahead
-      echo "Running your custom commands..."
-      
-      # Example command: Pull the latest changes
+      if [ "$FORCE_PULL" = true ]; then
+        echo "Up to date.  Update forced."
+      else
+        echo "Update available."
+      fi
       git pull origin $BRANCH
-      cat nix/shell.nix | sed "s#__ROOST_DIR__#\"$ROOST_DIR\"#" > ${ROOST_DIR}/shell.nix
-      # Add more commands as needed, such as rebuilding or restarting services
-      # ./build.sh
-      # ./restart_service.sh
+      cat nix/shell.nix | sed "s#__ROOST_DIR__#$ROOST_DIR#" > ${ROOST_DIR}/shell.nix
   fi
 fi
