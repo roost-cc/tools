@@ -58,6 +58,7 @@ while true; do
     echo
     bash --login -e <(cat $ROOST_DIR/tools/setup/${STEP_FILE})
   else
+    echo
     echo "Remote step : ${STEP_FILE}"
     # grab the step from the repo if it exists
     read -p "press enter to continue"
