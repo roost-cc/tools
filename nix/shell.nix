@@ -39,7 +39,7 @@ pkgs.mkShell {
 #       echo "AWS credentials stored successfully."
 #     fi
 
-    export ROOST_DIR=__ROOST_DIR__
+    export ROOST_DIR="__ROOST_DIR__"
     export ROOST_APP_DIR="$ROOST_DIR/app.roost.cc"
     export PATH="$ROOST_DIR/tools/bin:$PATH"
     # Chrome
