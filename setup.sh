@@ -41,6 +41,7 @@ fi
 echo Setting up in \"$ROOST_DIR\"
 cd $ROOST_DIR
 read -p "press enter to continue"
+pwd
 
 STEP=0
 if [ -f "$ROOST_DIR/.setup_step" ]; then
@@ -59,9 +60,7 @@ while true; do
     echo "Remote step : ${STEP_FILE}"
     # grab the step from the repo if it exists
     echo curl -s -w \"%{http_code}\" -X HEAD https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE}
-    set +e
     HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X HEAD "https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE}" || true)
-    set -e
     if [ $HTTP_CODE -ne 200 ]; then
       echo No step $STEP
       exit
