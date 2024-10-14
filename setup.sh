@@ -72,20 +72,15 @@ while true; do
     fi 
     bash --login -e <(curl -s -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE})
   fi
+  # Record a successful step
   echo $STEP>$ROOST_DIR/.setup_step
-  
-  # # Check the result
-  # RES=$?
-  # if [ $RES -eq 0 ]; then
-  #   echo $STEP>$ROOST_DIR/.setup_step
-  # elif [ $RES -eq 42 ]; then
-  #   # The step needs out-of-band action 
-  #   # Increment the step count & exit
-  #   echo $STEP>$ROOST_DIR/.setup_step
-  #   exit
-  # else
-  #   # something else when wrong - exit
-  #   echo "Step failed with exit code $RES."
-  #   exit
-  # fi
 done
+
+echo 
+echo The Roost Development Environment is ready.  Exit this terminal \(you might have to log out of your 
+echo window manager.\) 
+echo 
+echo Restart the terminal.  Go to the roost directory, and run nix-shell.
+echo 
+echo cd \"$ROOST_DIR\"
+echo nix-shell
