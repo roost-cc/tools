@@ -16,12 +16,12 @@ else
 fi
 
 
-PROFILE=roost
+PROFILE=google-chrome-roost
 CONFIG_DIR=$HOME/.config
-CACHE_DIR=$HOME/.cache/google-chrome-${PROFILE}
-DATA_DIR=${CONFIG_DIR}/google-chrome-${PROFILE}
+CACHE_DIR=$HOME/.cache/${PROFILE}
+DATA_DIR=${CONFIG_DIR}/${PROFILE}
 export SSLKEYLOGFILE=${DATA_DIR}/sslkeyfile
-SOURCE_DIR=${ROOST_DIR}/tools/chrome-config/${PROFILE}
+SOURCE_DIR=${ROOST_DIR}/tools/browser-config/${PROFILE}
 
 if [ ! -d ${SOURCE_DIR} ]; then
   echo "Extracting config dir"
