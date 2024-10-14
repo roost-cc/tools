@@ -67,7 +67,14 @@ while true; do
     echo
     HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X HEAD "https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE}" || true)
     if [ $HTTP_CODE -ne 200 ]; then
-      echo No step $STEP
+      echo 
+      echo The Roost Development Environment is ready.  Exit this terminal \(you might have to log out of your 
+      echo window manager.\) 
+      echo 
+      echo Restart the terminal.  Go to the roost directory, and run nix-shell.
+      echo 
+      echo cd \"$ROOST_DIR\"
+      echo nix-shell
       exit
     fi 
     bash --login -e <(curl -s -L https://raw.githubusercontent.com/roost-cc/tools/refs/heads/main/setup/${STEP_FILE})
@@ -75,12 +82,3 @@ while true; do
   # Record a successful step
   echo $STEP>$ROOST_DIR/.setup_step
 done
-
-echo 
-echo The Roost Development Environment is ready.  Exit this terminal \(you might have to log out of your 
-echo window manager.\) 
-echo 
-echo Restart the terminal.  Go to the roost directory, and run nix-shell.
-echo 
-echo cd \"$ROOST_DIR\"
-echo nix-shell

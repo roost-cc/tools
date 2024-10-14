@@ -10,8 +10,8 @@ if command -v nix >/dev/null 2>&1; then
   echo "nix already installed"
 else
   echo "downloading up 'nix' : ${ROOST_DIR}..."
-  #sh <(curl -L https://nixos.org/nix/install) --daemon
-  bash <(curl -L https://nixos.org/nix/install) --no-daemon
+  bash <(curl -L https://nixos.org/nix/install) --daemon
+  #bash <(curl -L https://nixos.org/nix/install) --no-daemon
   mkdir -p $HOME/.config/nixpkgs/
   echo "{ allowUnfree = true; }" > $HOME/.config/nixpkgs/config.nix
 fi
