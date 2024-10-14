@@ -1,6 +1,6 @@
 #!/bin/bash
-if [ -z "$ROOST_APP_DIR" ]; then
-  echo "ROOST_APP_DIR not set, exiting..."
+if [ -z "$ROOST_DIR" ]; then
+  echo "ROOST_DIR not set, exiting..."
   exit 1
 fi
 
@@ -21,7 +21,11 @@ CONFIG_DIR=$HOME/.config
 CACHE_DIR=$HOME/.cache/google-chrome-${PROFILE}
 DATA_DIR=${CONFIG_DIR}/google-chrome-${PROFILE}
 export SSLKEYLOGFILE=${DATA_DIR}/sslkeyfile
-SOURCE_DIR=${ROOST_APP_DIR}/tools/chrome-config/${PROFILE}
+SOURCE_DIR=${ROOST_DIR}/tools/chrome-config/${PROFILE}
+
+if [ ! -d ${SOURCE_DIR} ]; then
+  echo "Extracting config dir"
+fi
 
 RUNNING=""
 PROC=$(ps -ef | grep -v grep | grep $BROWSER | grep -- "$DATA_DIR")

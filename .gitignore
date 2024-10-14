@@ -1,5 +1,6 @@
 # Logs
 creds.json
+chrome_config/
 logs
 *.log
 npm-debug.log*
