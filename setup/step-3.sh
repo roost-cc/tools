@@ -39,10 +39,19 @@ if ! grep -A 3 '^Host roost-git' ${ssh_config} 2> /dev/null; then
   if [ ! -f "${ssh_config}" ]; then 
     touch ${ssh_config}
   fi
-  read -p "Enter your SSH Key ID (provided by administrator): " ssh_key_id
 
-echo Adding configuration $ssh_config
-cat <<EOF >> $ssh_config
+  # Prompt for SSH Key ID and ensure it is 20 characters long and composed of A-Z and 0-9
+  while true; do
+    read -p "Enter your SSH Key ID (provided by administrator): " ssh_key_id
+    if [[ "$ssh_key_id" =~ ^[A-Z0-9]{20}$ ]]; then
+      break  # Exit the loop if ssh_key_id matches the pattern
+    else
+      echo "Invalid SSH Key ID. It must be exactly 20 characters long and contain only uppercase letters (A-Z) and digits (0-9)."
+    fi
+  done
+
+  echo Adding configuration $ssh_config
+  cat <<EOF >> $ssh_config
 
 Host roost-git
   Hostname ${git_host}

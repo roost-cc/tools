@@ -5,6 +5,7 @@ handle_error() {
     local command="$BASH_COMMAND"  # The command that was being executed
 
     echo "Error occurred on line $error_line."
+    echo "Step: $STEP_FILE"
     echo "Command: $command"
     echo "Exit code: $exit_code"
     exit $exit_code  # Exit with the same error code that caused the trap
