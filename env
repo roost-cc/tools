@@ -1,8 +1,10 @@
 #!/bin/sh
 case ":${PATH}:" in
-    *:"$ROOST_APP_DIR/tools/bin":*)
+    *:"$ROOST_DIR/tools/bin":*)
         ;;
     *)
-        export PATH="$ROOST_APP_DIR/tools/bin:$PATH"
+        export PATH="$ROOST_DIR/tools/bin:$PATH"
         ;;
 esac
+export ROOST_APP_DIR=$ROOST_DIR/app.roost.cc
+export ROOST_CC_DIR=$ROOST_DIR/roost.cc
