@@ -40,8 +40,14 @@ if [ -z "$ROOST_DIR" ]; then
 fi
 
 echo Setting up in \"$ROOST_DIR\"
-cd $ROOST_DIR
 read -p "press enter to continue"
+
+if [ ! -d "${ROOST_DIR}" ]; then
+  echo creating ${ROOST_DIR}
+  mkdir -p "${ROOST_DIR}"
+fi
+
+cd $ROOST_DIR
 pwd
 
 STEP=0
