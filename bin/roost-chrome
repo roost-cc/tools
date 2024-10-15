@@ -96,7 +96,7 @@ fi
 
 if [[ $DATA_DIFF == "diff" ]]; then
   PREF_CURRENT=$(mktemp)
-  jq --sort-keys . ${CONFIG_DIR}/google-chrome-${PROFILE}/Default/Preferences > $PREF_CURRENT
+  jq --sort-keys . ${CONFIG_DIR}/${PROFILE}/Default/Preferences > $PREF_CURRENT
   vimdiff $SOURCE_DIR/Default/Preferences $PREF_CURRENT
   rm $PREF_CURRENT
   exit 0
@@ -120,6 +120,11 @@ if [[ $RUNNING == "" ]]; then
     rm -rv ${CACHE_DIR}
     exit 0
   fi
+fi
+
+if [[ ! -d "$DATA_DIR" ]]; then
+    echo "No data directory.  Deploying fresh data directory"
+    cp -av "$SOURCE_DIR" "$DATA_DIR"
 fi
 
 echo "Starting Google Chrome for roost"

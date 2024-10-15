@@ -1,0 +1,40 @@
+{
+   "checksum": "50b18980692196290c42e51d7f752c04",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13282680296104868",
+            "guid": "a0cf3bfb-f24c-4df5-a5d7-2394ae9ca747",
+            "id": "5",
+            "name": "Inspect with Chrome Developer Tools",
+            "type": "url",
+            "url": "chrome://inspect/#devices"
+         } ],
+         "date_added": "13282503620461551",
+         "date_modified": "13282680296104868",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Bookmarks bar",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13282503620461553",
+         "date_modified": "0",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other bookmarks",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13282503620461554",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile bookmarks",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}
