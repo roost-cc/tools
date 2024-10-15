@@ -18,18 +18,33 @@ pkgs.mkShell {
   shellHook = ''
     export ROOST_DIR="__ROOST_DIR__"
     export ROOST_APP_DIR="$ROOST_DIR/app.roost.cc"
-    export PATH="$ROOST_DIR/tools/bin:$PATH"
+
+    # node.js
+    unset NODE_PATH 
+    export NPM_PACKAGES="$ROOST_DIR/.config/npm-packages"
+    export npm_config_prefix="$NPM_PACKAGES"
+    export NPM_PACKAGES="$ROOST_DIR/.config/npm-packages"
+    export NODE_PATH="$NPM_PACKAGES/lib/node_modules:${pkgs.nodejs_22}/lib/node_modules"
+
+    export PATH="$ROOST_DIR/tools/bin:$NPM_PACKAGES/bin:$PATH"
+
+    mkdir -p "$ROOST_DIR/.config"
+
     # Chrome
     alias chrome="roost-chrome"
     # cowsay 
-    alias roostersay="LC_ALL=C cowsay -f __ROOST_DIR__/tools/nix/extras/rooster.cow"
+    alias roostersay="LC_ALL=C cowsay -f $ROOST_DIR/tools/nix/extras/rooster.cow"
 
     # Set a custom command line prompt
     # export PS1="(roost-dev) \u@\h:\w\$ "
     export PS1="\n\[\033[1;32m\][🐓:\u@\h:\w]\$\[\033[0m\] "
 
+    if [ -d "$ROOST_DIR/app.roost.cc/server/modules/tools/src/" ]; then
+      npm install -g $ROOST_DIR/app.roost.cc/server/modules/tools/src/
+    fi
+
     if [ -z "$NIX_QUIET" ]; then
-      fortune -s | LC_ALL=C cowsay -f __ROOST_DIR__/tools/nix/extras/rooster.cow
+      fortune -s | LC_ALL=C cowsay -f $ROOST_DIR/tools/nix/extras/rooster.cow
       echo
       echo "Welcome to Roost 🐓"
     fi

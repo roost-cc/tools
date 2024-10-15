@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# If no arguments are provided, use "." as the default.
+if [ $# -eq 0 ]; then
+  set -- "."
+fi
+
+# Loop over each argument (directory) and run the find command
+for dir in "$@"; do
+  find "$dir" -name "node_modules" -prune -o -name "package.json" -exec sh -c 'pushd "$(dirname "$1")"; npm install; popd' _ {} \;
+done
+
