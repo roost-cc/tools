@@ -1,19 +1,49 @@
 #!/bin/sh
+
+# Check if the ROOST_APP_DIR environment variable is set
 if [ -z "$ROOST_APP_DIR" ]; then
   echo "Environment variable ROOST_APP_DIR is not set"
   exit 1
 fi
+
+# Define directories
 ROOST_CONTAINER_DIR=${ROOST_APP_DIR}/containers
 ROOST_CLIENT_DIR=${ROOST_APP_DIR}/client
 
-tmux new -s roost -n containers -d
-tmux send-keys -t roost "cd $ROOST_CONTAINER_DIR" ENTER
-tmux send-keys -t roost "docker compose up" ENTER
+# Check if the script is running inside a nix-shell by inspecting the IN_NIX_SHELL environment variable
+if [ -n "$IN_NIX_SHELL" ]; then
+  echo "Running inside a nix-shell. Tmux windows will start with nix-shell."
 
-tmux new-window -t roost -n top
-tmux send-keys -t roost "btop" ENTER
+  # Start the tmux session and run nix-shell in the first window (containers)
+  tmux new -s roost -n containers -d
+  tmux send-keys -t roost "nix-shell --run 'cd $ROOST_CONTAINER_DIR && docker compose up'" ENTER
 
-tmux new-window -t roost -n watch
-tmux send-keys -t roost "cd $ROOST_CLIENT_DIR" ENTER
-tmux send-keys -t roost "$ROOST_CLIENT_DIR/gulp watch" ENTER
+  # Create the second window (top) and run nix-shell with btop
+  tmux new-window -t roost -n top
+  tmux send-keys -t roost "nix-shell --run 'btop'" ENTER
+
+  # Create the third window (watch) and run nix-shell with gulp watch
+  tmux new-window -t roost -n watch
+  tmux send-keys -t roost "nix-shell --run 'cd $ROOST_CLIENT_DIR && $ROOST_CLIENT_DIR/gulp watch'" ENTER
+
+else
+  echo "Not running inside a nix-shell. Tmux windows will start with the default shell."
+
+  # Start the tmux session and run default shell commands (containers)
+  tmux new -s roost -n containers -d
+  tmux send-keys -t roost "cd $ROOST_CONTAINER_DIR" ENTER
+  tmux send-keys -t roost "docker compose up" ENTER
+
+  # Create the second window (top) and run btop
+  tmux new-window -t roost -n top
+  tmux send-keys -t roost "btop" ENTER
+
+  # Create the third window (watch) and run gulp watch
+  tmux new-window -t roost -n watch
+  tmux send-keys -t roost "cd $ROOST_CLIENT_DIR" ENTER
+  tmux send-keys -t roost "$ROOST_CLIENT_DIR/gulp watch" ENTER
+fi
+
+# Attach to the tmux session
 tmux a -t roost
+
