@@ -4,6 +4,7 @@ pkgs.mkShell {
   buildInputs = [
     pkgs.nodejs_22     # For Node.js
     pkgs.docker        # For Docker
+    pkgs.btop          # resource monitor
     pkgs.awscli2       # AWS CLI
     pkgs.gnumake       # Make tool for general scripts
     pkgs.sass          # Global SASS installation
