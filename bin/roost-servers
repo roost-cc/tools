@@ -7,7 +7,7 @@ if [ -z "$ROOST_APP_DIR" ]; then
 fi
 
 # Define directories
-ROOST_CONTAINER_DIR=${ROOST_APP_DIR}/containers
+ROOST_CONTAINER_DIR=${ROOST_DIR}/containers
 ROOST_CLIENT_DIR=${ROOST_APP_DIR}/client
 
 # Check if the script is running inside a nix-shell by inspecting the IN_NIX_SHELL environment variable
