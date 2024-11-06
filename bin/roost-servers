@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Check if the ROOST_APP_DIR environment variable is set
-if [ -z "$ROOST_APP_DIR" ]; then
-  echo "Environment variable ROOST_APP_DIR is not set"
+if [ -z "$ROOST_DIR" ]; then
+  echo "Environment variable ROOST_DIR is not set"
   exit 1
 fi
 
@@ -11,38 +11,34 @@ ROOST_CONTAINER_DIR=${ROOST_DIR}/containers
 ROOST_CLIENT_DIR=${ROOST_APP_DIR}/client
 
 # Check if the script is running inside a nix-shell by inspecting the IN_NIX_SHELL environment variable
+TMUX_SHELL=''
 if [ -n "$IN_NIX_SHELL" ]; then
-  echo "Running inside a nix-shell. Tmux windows will start with nix-shell."
-
-  # Start the tmux session and run nix-shell in the first window (containers)
-  tmux new -s roost -n containers -d
-  tmux send-keys -t roost "nix-shell --run 'cd $ROOST_CONTAINER_DIR && docker compose up'" ENTER
-
-  # Create the second window (top) and run nix-shell with btop
-  tmux new-window -t roost -n top
-  tmux send-keys -t roost "nix-shell --run 'btop'" ENTER
-
-  # Create the third window (watch) and run nix-shell with gulp watch
-  tmux new-window -t roost -n watch
-  tmux send-keys -t roost "nix-shell --run 'cd $ROOST_CLIENT_DIR && $ROOST_CLIENT_DIR/gulp watch'" ENTER
-
+  echo "Running inside a nix-shell."
+  TMUX_SHELL='nix-shell'
 else
-  echo "Not running inside a nix-shell. Tmux windows will start with the default shell."
-
-  # Start the tmux session and run default shell commands (containers)
-  tmux new -s roost -n containers -d
-  tmux send-keys -t roost "cd $ROOST_CONTAINER_DIR" ENTER
-  tmux send-keys -t roost "docker compose up" ENTER
-
-  # Create the second window (top) and run btop
-  tmux new-window -t roost -n top
-  tmux send-keys -t roost "btop" ENTER
-
-  # Create the third window (watch) and run gulp watch
-  tmux new-window -t roost -n watch
-  tmux send-keys -t roost "cd $ROOST_CLIENT_DIR" ENTER
-  tmux send-keys -t roost "$ROOST_CLIENT_DIR/gulp watch" ENTER
+  TMUX_SHELL=${SHELL}
+  echo "Not running inside a nix-shell."
 fi
+  echo "Tmux windows will start with '${TMUX_SHELL}'."
+
+# Start the tmux session and run nix-shell in the first window (containers)
+tmux new-session -s roost -n containers -d "${TMUX_SHELL}"
+tmux send-keys -t roost "cd $ROOST_CONTAINER_DIR" ENTER
+tmux send-keys -t roost "docker compose up" ENTER
+tmux split-window -t roost -c "$ROOST_DIR" -v -l 5 "${TMUX_SHELL}"
+tmux send-keys -t roost "cd $ROOST_CONTAINER_DIR" ENTER
+
+# Create the second window (top) and run btop
+tmux new-window -t roost -n top "${TMUX_SHELL}"
+tmux send-keys -t roost:top "btop" ENTER
+
+# Create the third window (watch) and run gulp watch
+tmux new-window -t roost -n watch "${TMUX_SHELL}"
+tmux send-keys -t roost "cd $ROOST_CLIENT_DIR" ENTER
+tmux send-keys -t roost "$ROOST_CLIENT_DIR/gulp watch" ENTER
+
+# Create a browser window
+tmux new-window -t roost -n browser "${TMUX_SHELL}"
 
 # Attach to the tmux session
 tmux a -t roost
