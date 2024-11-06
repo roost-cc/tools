@@ -95,9 +95,9 @@ if [[ $RUNNING == "running" && $CLEAN == "cache" ]]; then
 fi
 
 if [[ $DATA_DIFF == "diff" ]]; then
-  PREF_CURRENT=$(mktemp)
+  PREF_CURRENT=$(mktemp cur.prefs.XXXXXXXXXX)
   jq --sort-keys . ${CONFIG_DIR}/${PROFILE}/Default/Preferences > $PREF_CURRENT
-  vimdiff $SOURCE_DIR/Default/Preferences $PREF_CURRENT
+  vimdiff -R $SOURCE_DIR/Default/Preferences $PREF_CURRENT
   rm $PREF_CURRENT
   exit 0
 fi
