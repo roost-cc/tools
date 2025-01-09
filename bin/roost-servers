@@ -22,7 +22,7 @@ fi
   echo "Tmux windows will start with '${TMUX_SHELL}'."
 
 # Start the tmux session and run nix-shell in the first window (containers)
-tmux new-session -s roost -n containers -d "${TMUX_SHELL}"
+tmux new-session -d -s roost -n containers "${TMUX_SHELL}"
 tmux send-keys -t roost "cd $ROOST_CONTAINER_DIR" ENTER
 tmux send-keys -t roost "docker compose up" ENTER
 tmux split-window -t roost -c "$ROOST_DIR" -v -l 5 "${TMUX_SHELL}"
@@ -41,5 +41,9 @@ tmux send-keys -t roost "$ROOST_CLIENT_DIR/gulp watch" ENTER
 tmux new-window -t roost -n browser "${TMUX_SHELL}"
 
 # Attach to the tmux session
-tmux a -t roost
+if [ -z "$TMUX" ]; then
+  tmux attach-session -t roost
+else
+  tmux switch-client -t roost
+fi
 
