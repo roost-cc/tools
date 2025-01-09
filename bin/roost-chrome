@@ -6,10 +6,10 @@ fi
 
 # Determine the name of the google-chrome executable 
 # either google-chrome or google-chrome-stable
-if command -v google-chrome >/dev/null 2>&1; then
-  BROWSER="google-chrome"
-elif command -v google-chrome-stable >/dev/null 2>&1; then
+if command -v google-chrome-stable >/dev/null 2>&1; then
   BROWSER="google-chrome-stable"
+elif command -v google-chrome >/dev/null 2>&1; then
+  BROWSER="google-chrome"
 else
   echo "No Chrome browser found in the path. Exiting..."
   exit 1
@@ -129,5 +129,6 @@ fi
 
 echo "Starting Google Chrome for roost"
 echo "SSL Key Log : ${SSLKEYLOGFILE}"
-echo $BROWSER --user-data-dir=$DATA_DIR --auto-open-devtools-for-tabs --enable-logging=stderr "$TEST" "${POSITIONAL[@]}"
-$BROWSER --user-data-dir=$DATA_DIR --auto-open-devtools-for-tabs --enable-logging=stderr "$TEST" "${POSITIONAL[@]}"
+BROWSER_CMD="${BROWSER} --auto-open-devtools-for-tabs --enable-logging=stderr"
+echo $BROWSER_CMD --user-data-dir=$DATA_DIR "$TEST" "${POSITIONAL[@]}"
+$BROWSER_CMD --user-data-dir=$DATA_DIR "$TEST" "${POSITIONAL[@]}"
