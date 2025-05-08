@@ -39,6 +39,7 @@ tmux send-keys -t roost "$ROOST_CLIENT_DIR/gulp watch" ENTER
 
 # Create a browser window
 tmux new-window -t roost -n browser "${TMUX_SHELL}"
+tmux send-keys -t roost "roost-chrome" ENTER
 
 # Attach to the tmux session
 if [ -z "$TMUX" ]; then

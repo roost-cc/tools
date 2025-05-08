@@ -129,6 +129,7 @@ fi
 
 echo "Starting Google Chrome for roost"
 echo "SSL Key Log : ${SSLKEYLOGFILE}"
-BROWSER_CMD="${BROWSER} --auto-open-devtools-for-tabs --enable-logging=stderr"
+#BROWSER_CMD="${BROWSER} --auto-open-devtools-for-tabs --enable-logging=stderr"
+BROWSER_CMD="${BROWSER} --auto-open-devtools-for-tabs --enable-logging -v=1"
 echo $BROWSER_CMD --user-data-dir=$DATA_DIR "$TEST" "${POSITIONAL[@]}"
 $BROWSER_CMD --user-data-dir=$DATA_DIR "$TEST" "${POSITIONAL[@]}"
