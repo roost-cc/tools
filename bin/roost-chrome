@@ -22,6 +22,7 @@ CACHE_DIR=$HOME/.cache/${PROFILE}
 DATA_DIR=${CONFIG_DIR}/${PROFILE}
 export SSLKEYLOGFILE=${DATA_DIR}/sslkeyfile
 SOURCE_DIR=${ROOST_DIR}/tools/browser-config/${PROFILE}
+REMOTE_DEBUGGING_PORT=9222
 
 if [ ! -d ${SOURCE_DIR} ]; then
   echo "Extracting config dir"
@@ -130,6 +131,6 @@ fi
 echo "Starting Google Chrome for roost"
 echo "SSL Key Log : ${SSLKEYLOGFILE}"
 #BROWSER_CMD="${BROWSER} --auto-open-devtools-for-tabs --enable-logging=stderr"
-BROWSER_CMD="${BROWSER} --auto-open-devtools-for-tabs --enable-logging -v=1"
+BROWSER_CMD="${BROWSER} --auto-open-devtools-for-tabs --enable-logging -v=1 --remote-debugging-port=${REMOTE_DEBUGGING_PORT}"
 echo $BROWSER_CMD --user-data-dir=$DATA_DIR "$TEST" "${POSITIONAL[@]}"
 $BROWSER_CMD --user-data-dir=$DATA_DIR "$TEST" "${POSITIONAL[@]}"
