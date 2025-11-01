@@ -130,3 +130,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+etc/ddnsclient.conf
+bin/NoSQL_Workbench.AppImage

@@ -1,0 +1,58 @@
+#!/bin/bash
+
+configure_ddns() {
+    local template_file="${CONF_FILE}.tmpl"
+    
+    echo "=== DDNSClient Configuration ==="
+    echo "1. Copy the template configuration:"
+    echo "   cp ${template_file} ${CONF_FILE}"
+    echo
+    echo "2. Edit ${CONF_FILE} and set your:"
+    echo "   - ROOST_DOMAIN (default: dev.roost.cc)"
+    echo "   - DDNS_PASSWORD (required, get from your domain provider)"
+    echo "   - ROOST_HOST (optional, defaults to machine hostname)"
+    echo
+    echo "Example configuration:"
+    echo "ROOST_DOMAIN=dev.roost.cc"
+    echo "DDNS_PASSWORD=your_password_here"
+    echo "ROOST_HOST=myhost"
+    echo
+}
+
+CONF_FILE=${ROOST_DIR}/tools/etc/ddnsclient.conf
+if [ ! -f "${CONF_FILE}" ]; then
+    echo "No configuration file found"
+    configure_ddns
+    exit 0
+fi
+source ${CONF_FILE}
+
+if [ -z "${DDNS_PASSWORD}" ]; then
+    echo "No DDNS password found"
+    configure_ddns
+    exit 0
+fi
+
+if [ -z "${ROOST_HOST}" ]; then
+    ROOST_HOST=$(hostname)
+fi
+ROOST_HOST=${ROOST_HOST}.${ROOST_SUBDOMAIN}
+echo ${ROOST_HOST}.${ROOST_DOMAIN}
+
+IP=$(ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '127.0.0.1' | head -n1)
+echo "Local IP address is ${IP}"
+
+DNS_IP=$(dig +noall +answer ${ROOST_HOST}.${ROOST_DOMAIN} | cut -f 5)
+echo Current DNS address is $DNS_IP
+
+echo "Press any key to continue..."
+read -n 1 -s
+
+if [ "${IP}" != "${DNS_IP}" ] 
+then
+	echo "DNS address and machine address do not match, updating"
+	wget -O - "https://dynamicdns.park-your-domain.com/update?host=${ROOST_HOST}&domain=${ROOST_DOMAIN}&password=${DDNS_PASSWORD}&ip=${IP}"
+else
+	echo "DNS and machine address match, no update"
+fi
+

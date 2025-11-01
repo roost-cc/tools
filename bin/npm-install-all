@@ -8,17 +8,14 @@ fi
 # Loop over each argument (directory)
 for dir in "$@"; do
   # Find all package.json files, excluding node_modules directories
-  find "$dir" -name "node_modules" -prune -o -name "package.json" -print 2>/dev/null | while read -r package_file; do
+  find "$dir" -name "package.json" -not -path "*/node_modules/*" | while read -r package_file; do
     # Get the directory containing the package.json file
     project_dir=$(dirname "$package_file")
-
     # Change to the project directory
     echo "Running npm install in $project_dir"
     pushd "$project_dir" > /dev/null
-
     # Run npm install
     npm install
-
     # Return to the previous directory
     popd > /dev/null
   done

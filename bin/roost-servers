@@ -24,7 +24,7 @@ fi
 # Start the tmux session and run nix-shell in the first window (containers)
 tmux new-session -d -s roost -n containers "${TMUX_SHELL}"
 tmux send-keys -t roost "cd $ROOST_CONTAINER_DIR" ENTER
-tmux send-keys -t roost "docker compose up" ENTER
+tmux send-keys -t roost "./start-servers" ENTER
 tmux split-window -t roost -c "$ROOST_DIR" -v -l 5 "${TMUX_SHELL}"
 tmux send-keys -t roost "cd $ROOST_CONTAINER_DIR" ENTER
 
@@ -40,6 +40,9 @@ tmux send-keys -t roost "$ROOST_CLIENT_DIR/gulp watch" ENTER
 # Create a browser window
 tmux new-window -t roost -n browser "${TMUX_SHELL}"
 tmux send-keys -t roost "roost-chrome" ENTER
+
+# switch back to the containers window
+tmux select-window -t "roost:containers"
 
 # Attach to the tmux session
 if [ -z "$TMUX" ]; then
