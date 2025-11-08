@@ -6,6 +6,6 @@ case ":${PATH}:" in
         export PATH="$ROOST_DIR/tools/bin:$PATH"
         ;;
 esac
-alias rode="npx rode"
+alias rode="$ROOST_APP_DIR/server/src/tools/src/bin/rode.js"
 export ROOST_APP_DIR=$ROOST_DIR/app.roost.cc
 export ROOST_CC_DIR=$ROOST_DIR/roost.cc
